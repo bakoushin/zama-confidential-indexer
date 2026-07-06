@@ -45,9 +45,7 @@ Performance work:
 
 ### SDK feedback
 
-1. **Typed decrypt errors.** Make it easy to see which kind of failure happened: _not entitled_, _delegation expired_, or a _temporary relayer failure_. Today the SDK throws the same generic error for all of them. So [decryptor.ts](src/lib/decryptor.ts) must treat every failure as retryable, and it wastes retry attempts on failures that are permanent. Any indexer or backend has to choose between "retry later" and "mark as not entitled and stop asking". Right now that choice is a guess.
-2. **A way to query entitlements.** Something like "list all delegations granted to me". To learn what it may decrypt, this project had to index raw ACL events. It also had to track expiry itself, because expiry has no event.
-3. **Sparse batch results.** `decryptValues` returns a record where a missing key means failure. A per-handle result (`{value} | {error}`) would be better.
+**One decrypt call instead of two.** The caller must pick the method: `decryptValues` when the signer itself may decrypt, `delegatedDecryptValues` when the access was delegated. The SDK already knows the signer address, so it could make that choice on its own, for example `decryptValues(inputs, { entitled })`. Because of this split, [decryptor.ts](src/lib/decryptor.ts) branches between the two calls.
 
 ### AI assistance
 
