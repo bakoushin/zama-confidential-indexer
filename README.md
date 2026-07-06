@@ -2,6 +2,10 @@
 
 A [Ponder](https://ponder.sh) indexer with a REST API. It indexes a confidential (ERC-7984) token on [Zama FHEVM](https://docs.zama.ai/protocol). Balances and transfer amounts of this token are encrypted on-chain. The indexer decrypts what it is allowed to see. Then it serves the data over HTTP.
 
+### Video overview
+
+[![Demo ERC-7984 token video](https://img.youtube.com/vi/TrcFe_w8b6w/0.jpg)](https://www.youtube.com/watch?v=TrcFe_w8b6w)
+
 ## How it works
 
 - The indexer reads `ConfidentialTransfer` events from the token, plus delegation events (`DelegatedForUserDecryption`, `RevokedDelegationForUserDecryption`) from the shared FHEVM ACL contract.
