@@ -1,5 +1,9 @@
 # DECISIONS
 
+### Video
+
+<iframe src="https://www.youtube.com/embed/TrcFe_w8b6w" width="560" height="315" title="Demo ERC-7984 token video" frameborder="0" allowfullscreen></iframe>
+
 ### Tech
 
 - **[Ponder](https://ponder.sh)** does the indexing. One dependency gives backfill, reorg handling, an embedded Postgres (PGlite), and an API layer (Hono). [Envio](https://envio.dev) was another option, but it's too big for a small demo project.
