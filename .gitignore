@@ -1,0 +1,16 @@
+# dependencies
+node_modules/
+
+# ponder runtime state (embedded pglite data, sync cache) and codegen
+.ponder/
+generated/
+
+# environment — real keys stay local; only .env.example is committed
+.env
+.env.*
+!.env.example
+
+# build & misc
+dist/
+*.log
+.DS_Store

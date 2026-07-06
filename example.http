@@ -1,0 +1,15 @@
+### This file is best used with Visual Studio Code "REST Client" extension:
+### https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+
+
+### Balance by address
+http://localhost:42069/v1/balance/0x70997970C51812dc3A010C7d01b50e0d17dc79C8
+
+### Transfers by address
+http://localhost:42069/v1/transfers/0x70997970C51812dc3A010C7d01b50e0d17dc79C8
+
+### Token Metadata
+http://localhost:42069/v1/token
+
+### Indexer Health
+http://localhost:42069/v1/health
