@@ -2,7 +2,7 @@
 
 ### Video
 
-<iframe src="https://www.youtube.com/embed/TrcFe_w8b6w" width="560" height="315" title="Demo ERC-7984 token video" frameborder="0" allowfullscreen></iframe>
+[![Demo ERC-7984 token video](https://img.youtube.com/vi/TrcFe_w8b6w/0.jpg)](https://www.youtube.com/watch?v=TrcFe_w8b6w)
 
 ### Tech
 

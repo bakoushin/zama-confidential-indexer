@@ -9,6 +9,10 @@ A [Ponder](https://ponder.sh) indexer with a REST API. It indexes a confidential
 - A background job (the "reconcile sweep") runs on every block. It retries failed decryptions and updates the heartbeat for `/v1/health`.
 - Decrypted amounts stay in the database, even if the user revokes the delegation later. Transfers that the indexer can't decrypt stay encrypted. The API returns them as `NOT_ENTITLED`.
 
+## Motivation
+
+See [DECISIONS.md](DECISIONS.md)
+
 ## What you need
 
 - Node.js 22 or newer
@@ -86,37 +90,37 @@ See [example.http](example.http) for more request examples.
 
 All endpoints are `GET`. No authentication. Bigint values are returned as strings.
 
-| Endpoint                 | What it does                                                                                                                                                                                     |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `/v1/balance/:address`   | Current balance. `status` is `DECRYPTED` or `NOT_ENTITLED`. Returns 503 if decryption is not available right now.                                                                                |
+| Endpoint                 | What it does                                                                                                                                                                                                |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/v1/balance/:address`   | Current balance. `status` is `DECRYPTED` or `NOT_ENTITLED`. Returns 503 if decryption is not available right now.                                                                                           |
 | `/v1/transfers/:address` | Transfer history (`from` or `to` = address), newest first. `?limit=` (1–200, default 50) and `?cursor=` for keyset pagination. Each row has a `status`: `DECRYPTED`, `PENDING`, `FAILED` or `NOT_ENTITLED`. |
-| `/v1/token`              | Token metadata: `address`, `name`, `symbol`, `decimals`.                                                                                                                                         |
-| `/v1/health`             | Indexing lag vs the chain head. 200 when `lag <= HEALTH_LAG_THRESHOLD`, 503 otherwise.                                                                                                           |
+| `/v1/token`              | Token metadata: `address`, `name`, `symbol`, `decimals`.                                                                                                                                                    |
+| `/v1/health`             | Indexing lag vs the chain head. 200 when `lag <= HEALTH_LAG_THRESHOLD`, 503 otherwise.                                                                                                                      |
 
 ## Configuration
 
 Environment variables (validated in [src/lib/env.ts](src/lib/env.ts)):
 
-| Variable                   | Default                 | What it is                                                |
-| -------------------------- | ----------------------- | --------------------------------------------------------- |
-| `TOKEN_ADDRESS`            | — (required)            | Address of the confidential token to index                |
+| Variable                   | Default                 | What it is                                                   |
+| -------------------------- | ----------------------- | ------------------------------------------------------------ |
+| `TOKEN_ADDRESS`            | — (required)            | Address of the confidential token to index                   |
 | `INDEXER_PRIVATE_KEY`      | — (required)            | Key of the indexer identity, used for (delegated) decryption |
-| `RPC_URL`                  | `http://127.0.0.1:8545` | JSON-RPC endpoint                                         |
-| `CHAIN_ID`                 | `31337`                 | `31337` (Anvil) or `11155111` (Sepolia)                   |
-| `START_BLOCK`              | `0`                     | First block to index                                      |
-| `RECONCILE_BLOCK_INTERVAL` | `1`                     | Blocks between reconcile sweeps                           |
-| `RECONCILE_BATCH`          | `25`                    | Max rows retried per sweep                                |
-| `RECONCILE_MAX_ATTEMPTS`   | `25`                    | Attempts before a row is marked `FAILED`                  |
-| `HEALTH_LAG_THRESHOLD`     | `25`                    | Max allowed lag (in blocks) for `/v1/health`              |
+| `RPC_URL`                  | `http://127.0.0.1:8545` | JSON-RPC endpoint                                            |
+| `CHAIN_ID`                 | `31337`                 | `31337` (Anvil) or `11155111` (Sepolia)                      |
+| `START_BLOCK`              | `0`                     | First block to index                                         |
+| `RECONCILE_BLOCK_INTERVAL` | `1`                     | Blocks between reconcile sweeps                              |
+| `RECONCILE_BATCH`          | `25`                    | Max rows retried per sweep                                   |
+| `RECONCILE_MAX_ATTEMPTS`   | `25`                    | Attempts before a row is marked `FAILED`                     |
+| `HEALTH_LAG_THRESHOLD`     | `25`                    | Max allowed lag (in blocks) for `/v1/health`                 |
 
 Storage: Ponder's embedded PGlite under `.ponder/` by default. Set `DATABASE_URL` to use Postgres. Postgres is required for `npm run serve` (the API-only mode).
 
 ## Scripts
 
-| Command             | What it does                                                            |
-| ------------------- | ------------------------------------------------------------------------ |
-| `npm run dev`       | Indexer + API with hot reload                                            |
-| `npm start`         | Production indexer + API                                                 |
-| `npm run serve`     | API only (needs Postgres)                                                |
+| Command             | What it does                                                                   |
+| ------------------- | ------------------------------------------------------------------------------ |
+| `npm run dev`       | Indexer + API with hot reload                                                  |
+| `npm start`         | Production indexer + API                                                       |
+| `npm run serve`     | API only (needs Postgres)                                                      |
 | `npm test`          | Vitest suite. Runs fully in-process (PGlite + mocked relayer), no Anvil needed |
-| `npm run typecheck` | `tsc --noEmit`                                                           |
+| `npm run typecheck` | `tsc --noEmit`                                                                 |
